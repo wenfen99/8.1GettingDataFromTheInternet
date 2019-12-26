@@ -42,6 +42,11 @@ class OverviewViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
+    private val _properties = MutableLiveData<List<MarsProperty>>()
+
+    val properties: LiveData<List<MarsProperty>>
+        get() = _properties
+
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(
@@ -65,6 +70,10 @@ class OverviewViewModel : ViewModel() {
 
                 _response.value =
                         "Success: ${listResult.size} Mars properties retrieved"
+
+                if (listResult.size > 0) {
+                    _properties.value = listResult
+                }
             } catch (e: Exception) {
                 _response.value = "Failure: ${e.message}"            }
         }
@@ -72,7 +81,7 @@ class OverviewViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel() 
+        viewModelJob.cancel()
     }
 
 }
